@@ -1,8 +1,10 @@
 {
-  "name": "miniprogram-ts-quickstart",
+  "name": "fitpocket",
   "version": "1.0.0",
-  "description": "",
+  "description": "点两下，记住今天练过。",
   "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -10,6 +12,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "miniprogram-api-typings": "^2.8.3-1"
+    "miniprogram-api-typings": "^2.8.3-1",
+    "typescript": "^5.5.4"
   }
 }

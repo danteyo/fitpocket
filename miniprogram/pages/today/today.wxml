@@ -1,0 +1,112 @@
+<view class="page-shell {{criticalVisible && criticalLevel === 'strong' ? 'screen-shake' : ''}}">
+  <view wx:if="{{criticalVisible && criticalLevel !== 'normal'}}" class="impact-flash impact-flash-{{criticalLevel}}">
+    <view class="flash-core"></view>
+    <view wx:if="{{criticalLevel === 'strong' || criticalLevel === 'max'}}" class="flash-core flash-core-second"></view>
+  </view>
+  <view class="topbar"></view>
+  <view class="heading">
+    <text class="eyebrow">FITPOCKET</text>
+    <text class="title">{{saved ? '今天练过了' : '练哪儿了'}}</text>
+    <text class="subtitle" wx:if="{{saved}}">{{recordSummary}}</text>
+    <text class="subtitle" wx:else>点点今天照顾过的地方</text>
+  </view>
+  <view class="body-stage">
+    <view wx:if="{{userLoggedIn}}" class="user-profile body-profile"><image src="{{userAvatarUrl}}" mode="aspectFill"></image><text>{{userNickname}}</text></view>
+    <view class="body-shadow"></view>
+    <view class="person {{bodyArea === 'full' ? 'wiggle' : ''}} {{criticalVisible ? 'impact-person impact-' + criticalLevel : ''}}">
+      <view wx:if="{{criticalVisible && criticalLevel === 'max'}}" class="max-burst"></view>
+      <view wx:if="{{criticalVisible && criticalLevel === 'max'}}" class="gold-particles">
+        <view wx:for="{{[1,2,3,4,5,6,7,8,9,10,11,12]}}" wx:key="*this" class="gold-particle gold-particle-{{item}}"></view>
+      </view>
+      <view wx:if="{{criticalVisible && criticalQuip}}" class="critical-cloud critical-cloud-{{criticalLevel}}">
+        <view class="cloud-puff cloud-puff-left"></view><view class="cloud-puff cloud-puff-right"></view>
+        <text>{{criticalQuip}}</text>
+      </view>
+      <view wx:if="{{bodyFeedback}}" class="muscle-callout">
+        <text class="muscle-callout-icon">💪</text>
+        <text class="muscle-callout-copy">{{bodyFeedback}}</text>
+      </view>
+      <view class="head"></view>
+      <image wx:if="{{upperSelected}}" class="body-swap buff-upper" src="/assets/body/buff-upper-v1.png" mode="aspectFit"></image>
+      <image wx:if="{{lowerSelected}}" class="body-swap buff-lower" src="/assets/body/buff-lower-v1.png" mode="aspectFit"></image>
+      <view class="upper-hit" bindtap="chooseUpper">
+        <block wx:if="{{!upperSelected}}"><view class="torso"></view><view class="arm left"></view><view class="arm right"></view></block>
+      </view>
+      <view class="lower-hit" bindtap="chooseLower">
+        <block wx:if="{{!lowerSelected}}"><view class="leg left"></view><view class="leg right"></view></block>
+      </view>
+    </view>
+    <view class="body-hint"><text>{{bodyArea ? areaLabel || (bodyArea === 'upper' ? '上半身' : bodyArea === 'lower' ? '下半身' : '全身') : '上半身 / 下半身'}}</text></view>
+    <view class="critical critical-{{criticalLevel}} {{criticalVisible ? 'burst' : ''}}" wx:if="{{criticalVisible}}">
+      <text class="critical-copy">{{feedback}}</text>
+    </view>
+  </view>
+  <view class="intensity ready">
+    <text class="question">今天练得多狠？</text>
+    <view class="faces">
+      <button wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="face-button {{celebratingIntensity === item ? 'active' : ''}} {{celebratingIntensity && celebratingIntensity !== item ? 'dimmed' : ''}}" data-value="{{item}}" bindtap="chooseIntensity">
+        <view class="face face-{{item}}">
+          <view class="brows"><view></view><view></view></view>
+          <view class="eyes"><view></view><view></view></view>
+          <view class="mouth"></view>
+          <view class="cheeks"><view></view><view></view></view>
+          <view class="face-effect {{celebratingIntensity === item ? 'show' : ''}}">
+            <block wx:if="{{item === 1}}"><view class="star star-1">★</view><view class="star star-2">★</view></block>
+            <block wx:elif="{{item === 2}}"><view class="star star-1 single">★</view></block>
+            <block wx:elif="{{item === 3}}"><view class="drop drop-1"></view></block>
+            <block wx:elif="{{item === 4}}"><view class="drop drop-1"></view><view class="drop drop-2"></view></block>
+            <block wx:else><view class="drop drop-1"></view><view class="drop drop-2"></view><view class="drop drop-3"></view><view class="drop drop-4"></view><view class="drop drop-5"></view></block>
+          </view>
+        </view>
+      </button>
+    </view>
+    <view class="labels"><text>轻轻动</text><text>拼尽了</text></view>
+    <button class="finish-button" loading="{{saving}}" bindtap="finishWorkout">{{saved && !draftDirty ? '练废了' : '练练就练练'}}</button>
+  </view>
+  <view class="undo {{showFeedback && !criticalVisible ? 'visible' : ''}}"><text>{{feedback}}</text></view>
+  <view class="bottom-nav"><button class="nav active" bindtap="goToday"><view class="nav-icon today-icon"></view><text>今天</text></button><button class="nav" bindtap="goHistory"><view class="nav-icon grid-icon"></view><text>视图</text></button></view>
+  <view wx:if="{{onboardingVisible}}" class="onboarding">
+    <view class="onboarding-brand">练哪儿了</view>
+    <view class="onboarding-copy">
+      <text class="onboarding-title">哪里锻炼了，就点哪里</text>
+      <text class="onboarding-subtitle">不用填表，不用费脑</text>
+    </view>
+    <view class="guide-stage">
+      <view class="person guide-person">
+        <view class="head"></view>
+        <view class="guide-base-upper"><view class="torso"></view><view class="arm left"></view><view class="arm right"></view></view>
+        <view class="guide-base-lower"><view class="leg left"></view><view class="leg right"></view></view>
+        <image class="body-swap buff-upper guide-buff-upper" src="/assets/body/buff-upper-v1.png" mode="aspectFit"></image>
+        <image class="body-swap buff-lower guide-buff-lower" src="/assets/body/buff-lower-v1.png" mode="aspectFit"></image>
+        <view class="guide-tap upper"><view class="guide-finger">☝</view><view class="guide-ring"></view></view>
+        <view class="guide-tap lower"><view class="guide-finger">☝</view><view class="guide-ring"></view></view>
+      </view>
+    </view>
+    <view class="onboarding-easy"><text>so easy</text><view>练完两下就记好了</view></view>
+    <button class="onboarding-skip" bindtap="finishOnboarding">练练就练练</button>
+  </view>
+  <view wx:if="{{loginVisible}}" class="login-mask">
+    <view class="login-dialog">
+      <button class="login-close" bindtap="closeLogin" aria-label="关闭登录弹窗"><view></view><view></view></button>
+      <block wx:if="{{loginStep === 'welcome'}}">
+        <view class="login-brand"><view></view></view>
+        <text class="login-title">欢迎来到 练哪儿了</text>
+        <text class="login-copy">登录后，记住每一次身体变强的样子。</text>
+        <button class="wechat-login" bindtap="beginWechatLogin">微信登录</button>
+        <text class="login-note">不会获取手机号</text>
+      </block>
+      <block wx:else>
+        <button class="login-back" bindtap="backToLoginWelcome">‹</button>
+        <text class="login-title">使用微信头像昵称</text>
+        <text class="login-copy">分别确认头像和昵称后，再完成微信登录。</text>
+        <button class="login-avatar" open-type="chooseAvatar" bindchooseavatar="chooseLoginAvatar">
+          <image wx:if="{{loginAvatarUrl}}" src="{{loginAvatarUrl}}" mode="aspectFill"></image>
+          <view wx:else class="avatar-placeholder"><view></view><text>授权头像</text></view>
+        </button>
+        <input class="login-nickname" type="nickname" value="{{loginNickname}}" placeholder="授权微信昵称" bindinput="changeLoginNickname" maxlength="20" />
+        <button class="wechat-login" loading="{{loginLoading}}" disabled="{{loginLoading}}" bindtap="loginWithWechat">确认并登录</button>
+        <text class="login-note">头像昵称仅用于个人展示与分享</text>
+      </block>
+    </view>
+  </view>
+</view>

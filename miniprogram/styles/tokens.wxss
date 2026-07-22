@@ -1,0 +1,8 @@
+page {
+  --bg: #F7F5EF;
+  --ink: #242321;
+  --muted: #78746D;
+  --brand: #FF6B4A;
+  --body-off: #DDD9CF;
+  --surface: rgba(255, 255, 255, .78);
+}

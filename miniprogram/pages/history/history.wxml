@@ -1,0 +1,28 @@
+<view class="page-shell history-page">
+  <view class="top-space"></view>
+  <view class="header"><view><text class="eyebrow">你的运动印记</text><picker class="month-picker" mode="multiSelector" range="{{monthPickerRange}}" value="{{monthPickerValue}}" bindchange="onMonthPicked"><view class="title-row"><text class="title">{{monthTitle}}</text><text class="picker-arrow">⌄</text></view></picker></view><view class="month-dot"></view></view>
+  <view class="weekdays"><text wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text></view>
+  <view class="calendar {{rowClass}} {{calendarMotion}}" bindtouchstart="onCalendarTouchStart" bindtouchend="onCalendarTouchEnd">
+    <view wx:for="{{cells}}" wx:key="key" class="cell {{item.empty ? 'empty' : ''}} {{item.future ? 'future' : ''}}" data-key="{{item.key}}" bindtap="selectDay">
+      <view class="heat {{item.areaClass}} {{item.stateClass}} {{item.today ? 'today' : ''}} {{item.criticalClass}}">
+        <text wx:if="{{!item.empty}}" class="day-number">{{item.day}}</text>
+        <view wx:if="{{item.dots.length}}" class="difficulty-dots"><view wx:for="{{item.dots}}" wx:key="*this"></view></view>
+        <view wx:if="{{item.criticalClass}}" class="critical-marker {{item.criticalClass}}"><view></view><view></view></view>
+      </view>
+    </view>
+  </view>
+  <view class="month-insight">
+    <text>你已经动了</text><text class="insight-number">{{activeDays}}天</text>
+    <text>，上肢肿大率</text><text class="insight-number">{{upperRate}}%</text>
+    <text>，下肢肿大率</text><text class="insight-number">{{lowerRate}}%</text><text>。</text>
+  </view>
+  <view wx:if="{{avatarUrl && nickname}}" class="share-profile">
+    <image src="{{avatarUrl}}" mode="aspectFill"></image>
+    <text>{{nickname}}</text>
+  </view>
+  <button class="share-poster" bindtap="generateSharePoster">分享我的大肌肉</button>
+  <canvas canvas-id="shareCanvas" class="share-canvas"></canvas>
+  <view class="sheet-mask {{sheetOpen ? 'open' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet {{sheetOpen ? 'open' : ''}}" wx:if="{{selected}}"><view class="handle"></view><text class="sheet-date">{{selected.date}}</text><text class="sheet-title">{{sheetTitle}}</text><view class="record"><view class="history-body-holder"><view class="history-body"><view class="history-head"></view><image wx:if="{{selected.bodyArea === 'upper' || selected.bodyArea === 'full'}}" class="history-swap history-buff-upper" src="/assets/body/buff-upper-v1.png" mode="aspectFit"></image><image wx:if="{{selected.bodyArea === 'lower' || selected.bodyArea === 'full'}}" class="history-swap history-buff-lower" src="/assets/body/buff-lower-v1.png" mode="aspectFit"></image><view wx:if="{{selected.bodyArea !== 'upper' && selected.bodyArea !== 'full'}}" class="history-upper"><view class="history-torso"></view><view class="history-arm left"></view><view class="history-arm right"></view></view><view wx:if="{{selected.bodyArea !== 'lower' && selected.bodyArea !== 'full'}}" class="history-lower"><view class="history-leg left"></view><view class="history-leg right"></view></view></view></view><view class="record-copy"><text class="record-main">{{selected.bodyArea ? (selected.bodyArea === 'full' ? '全身' : selected.bodyArea === 'upper' ? '上半身' : '下半身') : '未选锻炼部位'}}</text><view class="record-meta"><text class="record-sub {{selected.intensity ? 'record-badge' : ''}}">{{selected.intensity ? '难度印记 · ' + selected.intensity : '只记了锻炼部位'}}</text><text wx:if="{{sheetCriticalLabel}}" class="record-critical record-badge">{{sheetCriticalLabel}}</text></view></view></view></view>
+  <view class="bottom-nav"><button class="nav" bindtap="goToday"><view class="nav-icon today-icon"></view><text>今天</text></button><button class="nav active" bindtap="goHistory"><view class="nav-icon grid-icon"></view><text>视图</text></button></view>
+</view>
